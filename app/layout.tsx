@@ -1,36 +1,71 @@
-import { ColorModeScript, theme } from '@chakra-ui/react'
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/theme-provider";
+import "./globals.css";
 
-import { Provider } from './provider'
+const inter = Inter({ subsets: ["latin"] });
 
-export default function Layout(props: { children: React.ReactNode }) {
-  const colorMode = theme.config.initialColorMode
+export const metadata: Metadata = {
+  title: "FIRE Clip Machine - AI Repurposing for Personal Finance Podcasters",
+  description:
+    "Turn your FIRE podcast episodes into compliant, authoritative shorts, X threads, LinkedIn carousels, and quote graphics - built for serious creators.",
+  keywords: [
+    "FIRE",
+    "podcast repurposing",
+    "personal finance",
+    "content creation",
+    "AI",
+    "financial independence",
+    "retire early",
+  ],
+  openGraph: {
+    title: "FIRE Clip Machine - AI Repurposing for Personal Finance Podcasters",
+    description:
+      "Turn your FIRE podcast episodes into compliant, authoritative shorts, X threads, LinkedIn carousels, and quote graphics - built for serious creators.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FIRE Clip Machine - AI Repurposing for Personal Finance Podcasters",
+    description:
+      "Turn your FIRE podcast episodes into compliant, authoritative shorts, X threads, LinkedIn carousels, and quote graphics - built for serious creators.",
+  },
+};
 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" data-theme={colorMode} style={{ colorScheme: colorMode }}>
-      <head>
-        <link
-          rel="apple-touch-icon"
-          sizes="76x76"
-          href="/static/favicons/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/static/favicons/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/static/favicons/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/static/favicons/manifest.json" />
-      </head>
-      <body className={`chakra-ui-${colorMode}`}>
-        <ColorModeScript initialColorMode={colorMode} />
-        <Provider>{props.children}</Provider>
-      </body>
-    </html>
-  )
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/static/favicons/favicon-32x32.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/static/favicons/favicon-16x16.png"
+          />
+        </head>
+        <body className={inter.className}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
+  );
 }
